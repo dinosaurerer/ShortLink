@@ -1,53 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="asset/img/favicon.png"  >
+    <link rel="icon" href="asset/img/favicon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>short</title>
+    <title>短链接生成器</title>
     <style>
       :root {
         --color-primary: #5c7cfa;
         --color-primary-dark: #4263eb;
-        --color-primary-alpha: #5c7cfa50;
+        --color-primary-alpha: #5c7cfa40;
 
-        --body-color: #495057;
-        --body-bg: #f8f9fa;
+        --body-color: #343a40;
+        --body-bg: #fdfdfd;
+        --card-bg: #ffffff;
 
         --border-color: #dee2e6;
+        --shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+        --transition: all 0.3s ease;
+      }
+
+      [data-theme="dark"] {
+        --color-primary: #6c8eff;
+        --color-primary-dark: #5c7cfa;
+        --color-primary-alpha: #6c8eff40;
+
+        --body-color: #e9ecef;
+        --body-bg: #121212;
+        --card-bg: #1e1e1e;
+
+        --border-color: #343a40;
+        --shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
       }
 
       body {
-        max-width: 30rem;
-        margin-left: auto;
-        margin-right: auto;
-        padding-left: 2rem;
-        padding-right: 2rem;
+        max-width: 28rem;
+        margin: 3rem auto;
+        padding: 0 1.5rem;
         color: var(--body-color);
         background: var(--body-bg);
         font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        line-height: 1.5;
-        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-        text-rendering: optimizelegibility;
-        -webkit-font-smoothing: antialiased;
+        line-height: 1.6;
+        text-rendering: optimizeLegibility;
+        transition: var(--transition);
       }
 
-      a {
-        color: var(--color-primary);
-        text-decoration: none;
-        transition: color .3s;
+      .theme-toggle {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.25rem;
+        color: var(--body-color);
+        opacity: 0.7;
+        transition: var(--transition);
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
-      a:hover {
-        color: var(--color-primary);
-        text-decoration: underline;
+      .theme-toggle:hover {
+        opacity: 1;
+        background: var(--color-primary-alpha);
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 2rem;
+        position: relative;
       }
 
       h1 {
-        font-size: 5rem;
-        font-weight: 300;
-        text-align: center;
-        opacity: .2;
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: var(--color-primary-dark);
+        margin-bottom: .25rem;
+        transition: var(--transition);
+      }
+
+      .subtitle {
+        font-size: 1rem;
+        opacity: .7;
+        transition: var(--transition);
       }
 
       main[x-cloak] {
@@ -59,45 +99,52 @@
         transition: opacity .3s;
       }
 
+      .card {
+        background: var(--card-bg);
+        border-radius: .75rem;
+        padding: 1.5rem;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+      }
+
       input {
-        -webkit-appearance: none;
-        appearance: none;
         display: block;
         width: 100%;
-        padding: .5rem 1rem;
+        padding: .75rem 1rem;
+        margin-bottom: 1rem;
         border: 1px solid var(--border-color);
-        border-radius: .25rem;
+        border-radius: .5rem;
         box-sizing: border-box;
-        color: #33404d;
-        line-height: inherit;
         font-size: 1rem;
-        transition: border .3s, box-shadow .3s;
+        background: var(--card-bg);
+        color: var(--body-color);
+        transition: var(--transition);
       }
 
       input:focus {
-        box-shadow: 0 0 0 .25rem var(--color-primary-alpha);
         border-color: var(--color-primary);
+        box-shadow: 0 0 0 .2rem var(--color-primary-alpha);
         outline: 0;
+      }
+
+      input::placeholder {
+        color: var(--body-color);
+        opacity: 0.5;
       }
 
       details {
-        margin: 1rem 0 2rem;
+        margin: 1rem 0 1.5rem;
         border: 1px solid var(--border-color);
-        border-radius: .25rem;
-        transition: background .3s;
-      }
-
-      details[open] {
-        background: #fff;
+        border-radius: .5rem;
+        background: var(--card-bg);
+        transition: var(--transition);
       }
 
       details summary {
-        padding: .5rem 1rem;
+        padding: .75rem 1rem;
         font-weight: 500;
-        user-select: none;
         cursor: pointer;
-        opacity: .8;
-        outline: 0;
+        transition: var(--transition);
       }
 
       details div {
@@ -106,47 +153,34 @@
       }
 
       details small {
-        margin: 0;
-        font-size: .875rem;
-        line-height: 2;
+        font-size: .85rem;
+        color: var(--body-color);
+        opacity: 0.7;
       }
 
       button {
-        appearance: none;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        display: block;
         width: 100%;
-        margin-bottom: 5rem;
-        padding: .5rem .75rem;
-        border: 1px solid var(--color-primary);
-        border-radius: .25rem;
+        padding: .75rem;
+        border: none;
+        border-radius: .5rem;
         background: var(--color-primary);
         color: #fff;
         font-size: 1rem;
         font-weight: 500;
-        line-height: inherit;
         cursor: pointer;
-        user-select: none;
-        transition: border .3s, background .3s,;
+        transition: var(--transition);
       }
 
       button:hover {
-        border-color: var(--color-primary-dark);
         background: var(--color-primary-dark);
-      }
-
-      button:focus {
-        box-shadow: 0 0 0 .25rem var(--color-primary-alpha);
-        border-color: var(--color-primary);
-        outline: 0;
+        transform: translateY(-1px);
       }
 
       button:disabled {
-        background: var(--color-primary);
-        border-color: var(--color-primary);
         opacity: .6;
         cursor: not-allowed;
+        transform: none;
       }
 
       button.loading::before {
@@ -157,78 +191,139 @@
         border-top-color: transparent;
         border-bottom-color: transparent;
         border-radius: 50%;
-        width: .75rem;
-        height: .75rem;
+        width: .9rem;
+        height: .9rem;
         animation: rotate .5s linear infinite;
       }
 
       footer {
+        margin-top: 3rem;
         padding: 1rem;
         border-top: 1px solid var(--border-color);
         text-align: center;
-        opacity: .5;
-      }
-
-      footer i {
-        font-style: normal;
-        color: #ff8787;
+        font-size: .875rem;
+        color: var(--body-color);
+        opacity: 0.7;
+        transition: var(--transition);
       }
 
       .success,
       .error {
         margin-bottom: 1rem;
-        padding: .5rem 1rem;
-        border-radius: .25rem;
+        padding: .75rem 1rem;
+        border-radius: .5rem;
         color: #fff;
         text-align: center;
-        opacity: 1;
-        transition: opacity .3s;
+        transition: var(--transition);
       }
 
       .success {
-        border: 1px solid #12b886;
-        background: #38d9a9;
+        background: #40c057;
       }
 
       .error {
-        border: 1px solid #fa5252;
-        background: #ff8787;
+        background: #f03e3e;
       }
 
       @keyframes rotate {
-        100% {
-          transform: rotate(360deg);
+        100% { transform: rotate(360deg); }
+      }
+
+      /* 主题切换动画 */
+      .theme-icon {
+        transition: transform 0.5s ease;
+      }
+
+      [data-theme="dark"] .theme-icon.sun {
+        transform: rotate(180deg);
+      }
+
+      [data-theme="light"] .theme-icon.moon {
+        transform: rotate(180deg);
+      }
+
+      /* 响应式设计 */
+      @media (max-width: 480px) {
+        body {
+          margin: 1.5rem auto;
+          padding: 0 1rem;
+        }
+        
+        .theme-toggle {
+          top: 1rem;
+          right: 1rem;
+        }
+        
+        h1 {
+          font-size: 2rem;
+        }
+        
+        .card {
+          padding: 1.25rem;
         }
       }
     </style>
   </head>
-  <body>
-    <header><h1>short</h1></header>
-    <main x-data="app" x-cloak>
-      <p x-show.transition.opacity="alert" :class="alert?.type" x-text="alert?.message"></p>
-      <input placeholder="输入要缩短的网址..." x-model="url" x-ref="url" />
-      <details>
-        <summary>自定义设置</summary>
-        <div>
-          <input placeholder="slug" x-model="slug" />
-          <small>Slug 默认是随机生成的短 id。</small>
-        </div>
-      </details>
-      <button :class="{ loading }" :disabled="loading || isValidated()" @click="submit($refs, $nextTick)">生成</button>
+  <body x-data="app" x-bind:data-theme="theme">
+    <button class="theme-toggle" @click="toggleTheme()" aria-label="切换主题">
+      <span x-show="theme === 'light'" class="theme-icon moon">🌙</span>
+      <span x-show="theme === 'dark'" class="theme-icon sun">☀️</span>
+    </button>
+    
+    <header>
+      <h1>ShortURL</h1>
+      <p class="subtitle">一个简洁的短链接生成器</p>
+    </header>
+    
+    <main x-cloak>
+      <div class="card">
+        <p x-show.transition.opacity="alert" :class="alert?.type" x-text="alert?.message"></p>
+        <input placeholder="请输入要缩短的网址..." x-model="url" x-ref="url" />
+        <details>
+          <summary>自定义尾缀</summary>
+          <div>
+            <input placeholder="自定义 slug（可选）" x-model="slug" />
+            <small>Slug 默认会随机生成。</small>
+          </div>
+        </details>
+        <button :class="{ loading }" :disabled="loading || isValidated()" @click="submit($refs, $nextTick)">生成短链</button>
+      </div>
     </main>
-    <footer>
-     service
-    </footer>
+    
+   <footer>
+  © 2025 Powered by <a href="https://github.com/dinosaurerer" target="_blank">Dinosaur</a>
+  </footer>
+    
     <script src="asset/js/alpine.js"></script>
     <script>
       const app = {
+        theme: 'light',
         url: '',
         slug: '',
         alert: null,
         loading: false,
+        
+        init() {
+          // 从本地存储加载主题设置
+          const savedTheme = localStorage.getItem('theme');
+          if (savedTheme) {
+            this.theme = savedTheme;
+          } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            // 如果用户系统偏好暗色模式，则使用暗色模式
+            this.theme = 'dark';
+          }
+        },
+        
+        toggleTheme() {
+          this.theme = this.theme === 'light' ? 'dark' : 'light';
+          // 保存主题设置到本地存储
+          localStorage.setItem('theme', this.theme);
+        },
+        
         isValidated () {
           return !/^https?:\/\/.{3,}/.test(this.url)
         },
+        
         submit ($refs, $nextTick) {
           if (!this.url) {
             this.alert = { type: 'error', message: '缺少必需的参数：url。' }
@@ -263,7 +358,7 @@
 
               $nextTick(() => {
                 $refs.url.select()
-                this.alert = { type: 'success', message: `链接 ${document.execCommand('Copy') ? '复制' : '生成'} ` }
+                this.alert = { type: 'success', message: `链接 ${document.execCommand('Copy') ? '已复制' : '已生成'} ` }
               })
             })
             .catch(e => {
